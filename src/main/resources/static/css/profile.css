@@ -1,0 +1,164 @@
+.profile-sublogo {
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: bottom;
+	background: url('../img/profile-sublogo.png') no-repeat;
+	height: 23px;
+	width: 84px;
+	background-size: contain;
+	color: #333;
+}
+
+.coworkers-sublogo {
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: bottom;
+	background: url('../img/coworkers-sublogo.png') no-repeat;
+	height: 23px;
+	width: 142px;
+	background-size: contain;
+	color: #333;
+}
+
+.profile-photo {
+	height: 80px;
+	border-radius: 40px;
+}
+
+.profile-small-photo {
+	height: 60px;
+	width: 60px;
+	border-radius: 30px;
+}
+
+.profile-userinfo-block {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+.profile-team-member {
+	margin-bottom: 15px;
+}
+
+.medium-heading {
+	font-size: 16px;
+	margin-bottom:10px;
+}
+
+.medium-value {
+	font-size: 16px;
+	color: #666;
+	margin-bottom:25px;
+}
+
+.review-info {
+	padding-top: 7px;
+	font-size: 16px;
+}
+
+.small-menu {
+	margin-bottom: 15px;
+}
+
+.small-menu > .small-menu-item {
+	float: left;
+	margin-right: 25px;
+	padding-bottom: 10px;
+	font-size: 16px;
+	color: #3ba5c0;
+	cursor: pointer;
+}
+
+.small-menu > .small-menu-item.active {
+	color: #333;
+	border-bottom: 1px solid #3ba5c0;
+}
+
+.badge.red-badge {
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 9px;
+	padding: 4px 6px;
+	background-color: #e85c41;
+}
+
+.row.block-panel {
+	margin-right: 15px;
+	margin-left: 15px;
+}
+
+.goal-block {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	height: 50px;
+}
+
+.goal-block > div {
+	height: 100%;
+	line-height: 50px;
+}
+
+.due-date-red {
+	color: #e85c41;
+}
+
+.goal-image > img{
+	height: 50px;
+	width: 50px;
+}
+
+.goal-progress {
+	margin-top: 15px;
+}
+
+.goal-due-date {
+	text-align: center;
+}
+
+
+.questionnaire-info {
+	font-size: 16px;
+	margin-top: 7px;
+}
+
+.questionnaire-due-date {
+	text-align: center;
+	line-height: 60px;
+}
+
+#main-menu {
+	float: right;
+    margin-top: 33px;
+}
+
+#main-menu > .small-menu {
+	margin-bottom:0;
+}
+
+.coworker-info {
+	margin-top: 10px;
+}
+
+.coworker-value {
+	font-size: 14px;
+	line-height: 22px;
+}
+
+.coworker-value-small {
+	font-size: 13px;
+	line-height: 22px;
+}
+
+.coworker-heading {
+	font-size: 15px;
+}
+
+.small-menu-item > a {
+	text-decoration: none;
+	color: #333;
+}
