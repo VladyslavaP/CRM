@@ -24,6 +24,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin().loginPage(LOGIN).failureUrl(LOGIN_FAILURE).usernameParameter(EMAIL_PARAMETER).permitAll()
                 .and()
