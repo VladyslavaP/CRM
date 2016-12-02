@@ -1,1 +1,1 @@
-web: ./mvnw spring-boot:run -Drun.profiles=prod -Dserver.port=$PORT
+web: java -Dspring.profiles.active=prod -Dserver.port=$PORT -jar target/crm-0.0.1-SNAPSHOT.jar
