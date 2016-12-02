@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<#import "/spring.ftl" as spring/>
+
 <html>
 <head>
 	<title>Login page | CMR system</title>
@@ -22,6 +23,9 @@
 						<div class="logo">CRM system</div>
 					</div>
 					<div class="form">
+					    <#if error??>
+					        <p class="error"><@spring.message "login.failure"/></p>
+					    </#if>
                         <p class="info">Please enter your login information:</p>
 						<form id="login-form" action="/login" method="post">
 							<div class="field">

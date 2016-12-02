@@ -17,8 +17,13 @@ public class LoginController {
 
     @RequestMapping(value = LOGIN, method = RequestMethod.GET)
     public String getLoginPage(@RequestParam Optional<String> error, Model model) {
-        model.addAttribute(ERROR_PARAMETER, error);
+        populateModelIfLoginFailed(error, model);
         return LOGIN_PAGE;
+    }
+
+    private void populateModelIfLoginFailed(Optional<String> error, Model model) {
+        if(error.isPresent())
+            model.addAttribute(ERROR_PARAMETER, error.get());
     }
 
 }
