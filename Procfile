@@ -1,1 +1,1 @@
-web: ./mvnw spring-boot:run -Dprofiles=prod
+web: ./mvnw spring-boot:run -Drun.profiles=prod -Dserver.port=$PORT
