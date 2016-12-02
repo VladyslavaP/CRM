@@ -14,13 +14,13 @@ public class DefaultDatasourceConfig extends BaseDataSourceConfig{
 
     public static final String LOCALHOST = "localhost";
 
-    @Value("${spring.datasource.username}")
+    @Value("${local.datasource.username}")
     public String dbUserName;
 
-    @Value("${spring.datasource.password}")
+    @Value("${local.datasource.password}")
     private String dbPassword;
 
-    @Value("${spring.datasource.database.name}")
+    @Value("${local.datasource.database.name}")
     private String dbName;
 
     @Bean
