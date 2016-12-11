@@ -298,3 +298,7 @@
   padding: 5px 8px;
   height: 2em;
 }
+
+#profile-detailed-info input.datepicker{
+  margin-bottom: 0px;
+}

@@ -26,6 +26,7 @@ $(document).ready(function() {
 	$('#profile-detailed-info').on('click', '.edit-button', function() {
 	    $('#profile-detailed-info div.medium-value.editable').toggle();
 	    $('#profile-detailed-info input.medium-value').toggle();
+	    $('#profile-detailed-info .date').toggle();
 	});
 
 	$('#profile-detailed-info').on('click', '.save-button', function() {
@@ -61,6 +62,10 @@ $(document).ready(function() {
                 component.empty().append($(data).contents());
             }
         });
+    });
+
+    $('#profile-detailed-info .input-group.date').datepicker({
+        format: "yyyy-mm-dd"
     });
 	
 });

@@ -13,7 +13,9 @@
 
         <div class="medium-heading" th:text="#{profile.personalData.birthDate}"></div>
         <div class="medium-value editable" th:text="${currentUser.birthDate}?:#{profile.personalData.missing}"></div>
-        <input style="display:none" class="medium-value input" name="birthDate" th:value="${currentUser.birthDate}?:''"/>
+        <div style="display:none" class="input-group date">
+            <input type="text" class="form-control datepicker" name="birthDate" th:value="${currentUser.birthDate}?:''"/><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+        </div>
 
         <div class="save-button" style="display:none">
             <img src="./images/save.png"/>
