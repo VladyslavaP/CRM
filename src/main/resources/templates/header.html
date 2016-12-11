@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="header container-fluid" th:fragment="header(tab)">
+    <h1 class="ja-logo">CRM system</h1>
+    <h1 class="profile-sublogo">Profile</h1>
+    <div id="main-menu">
+        <div class="small-menu">
+            <div class="small-menu-item" th:classappend="${tab == 'profile'} ? 'active' : ''">
+                <a href="/">Your profile</a>
+            </div>
+
+            <div class="small-menu-item" th:classappend="${tab == 'coworkers'} ? 'active' : ''">
+                <a href="/coworkers">All coworkers</a>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+</html>

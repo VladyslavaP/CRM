@@ -1,0 +1,42 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta th:name="_csrf" th:content="${_csrf.token}"/>
+	<meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+	<title>Your profile | CRM system</title>
+	<script type="text/javascript" src="./js/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/bootstrap.min.css"/>
+
+	<link rel="stylesheet" type="text/css" href="./tooltipster-master/css/tooltipster.css" />
+	<script type="text/javascript" src="./tooltipster-master/js/jquery.tooltipster.min.js"></script>
+
+	<script type="text/javascript" src="./js/main.js"></script>
+	<script type="text/javascript" src="./js/profile.js"></script>
+
+	<link rel="stylesheet" href="./css/main.css"/>
+	<link rel="stylesheet" href="./css/profile.css"/>
+</head>
+
+<body>
+
+	<div class="page-container container-fluid">
+
+		<div th:replace="header :: header('profile')"></div>
+		<div class="clearfix"></div>
+
+		<div class="main-info-container container-fluid">
+
+			<div th:replace="profileName :: name"></div>
+
+			<div th:replace="profileFullPersonalData :: personalData"></div>
+
+			<div th:replace="profileCalendar :: calendar"></div>
+
+			<div th:replace="profileGoals :: goals"></div>
+
+		</div>
+	</div>
+
+</body>
+</html>

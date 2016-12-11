@@ -1,2 +1,2 @@
 INSERT INTO users (user_type, id, email, password_hash, role, position, first_name, last_name, birth_date) VALUES
-	('Employee', 1, 'test@gmail.com', '$2a$08$nR4d1qSVfZOxm1CqnbEcpeJby7lRdyGUc7Fhh24LQZ88ak3QSyWNm', 'USER', 'engineer', 'Test', 'Test', NULL);
+	('Employee', 1, 'test@gmail.com', '$2a$08$nR4d1qSVfZOxm1CqnbEcpeJby7lRdyGUc7Fhh24LQZ88ak3QSyWNm', 'EMPLOYEE', 'engineer', 'Test', 'Test', NULL);

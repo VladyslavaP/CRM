@@ -20,6 +20,9 @@ public class Employee extends User{
     @Column(name = "birth_date", columnDefinition = "DATE")
     private LocalDate birthDate;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     public String getPosition() {
         return position;
     }
@@ -50,5 +53,13 @@ public class Employee extends User{
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

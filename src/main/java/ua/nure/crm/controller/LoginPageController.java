@@ -13,7 +13,7 @@ import static ua.nure.crm.controller.util.ModelViewConstants.ERROR_PARAMETER;
 import static ua.nure.crm.controller.util.ModelViewConstants.LOGIN_PAGE;
 
 @Controller
-public class LoginController {
+public class LoginPageController {
 
     @RequestMapping(value = LOGIN, method = RequestMethod.GET)
     public String getLoginPage(@RequestParam Optional<String> error, Model model) {

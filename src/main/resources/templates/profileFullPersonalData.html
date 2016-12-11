@@ -1,0 +1,27 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="col-lg-4 col-md-4 col-sm-4 block-panel" id="profile-detailed-info" th:fragment="personalData">
+    <div class="block-panel-inner">
+        <div class="small-heading" style="margin-bottom:25px;" th:text="#{profile.personalData.yourInformation}"></div>
+
+        <div class="medium-heading" th:text="#{profile.personalData.email}"></div>
+        <div class="medium-value" th:text="${currentUser.email}"></div>
+
+
+        <div class="medium-heading" th:text="#{profile.personalData.phoneNumber}"></div>
+        <div class="medium-value editable" th:text="${currentUser.phoneNumber}?:#{profile.personalData.missing}"></div>
+        <input style="display:none" class="medium-value input" name="phoneNumber" th:value="${currentUser.phoneNumber}?:''"/>
+
+        <div class="medium-heading" th:text="#{profile.personalData.birthDate}"></div>
+        <div class="medium-value editable" th:text="${currentUser.birthDate}?:#{profile.personalData.missing}"></div>
+        <input style="display:none" class="medium-value input" name="birthDate" th:value="${currentUser.birthDate}?:''"/>
+
+        <div class="save-button" style="display:none">
+            <img src="./images/save.png"/>
+        </div>
+        <div class="edit-button">
+            <img src="./images/pencil.png"/>
+        </div>
+
+    </div>
+</div>
+</html>

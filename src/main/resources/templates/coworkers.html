@@ -1,242 +1,57 @@
-<!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>All coworkers | CRM system</title>
 	<script src="./js/jquery-2.2.4.min.js"></script>
 	<script src="./js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/bootstrap.min.css"/>
 
 	<script src="./js/main.js"></script>
 	<script src="./js/profile.js"></script>
 
-	<link rel="stylesheet" href="./css/main.css">
-	<link rel="stylesheet" href="./css/profile.css">
+	<link rel="stylesheet" href="./css/main.css"/>
+	<link rel="stylesheet" href="./css/profile.css"/>
 </head>
 
 <body>
 
 	<div class="page-container container-fluid">
-		<div class="header container-fluid">
-			<h1 class="ja-logo">CRM system</h1>
-			<h1 class="coworkers-sublogo">Coworkers</h1>
-			<div id="main-menu">
-				<div class="small-menu">
-					<div class="small-menu-item active">
-						<a href="/"> Your profile </a>
-					</div>
 
-					<div class="small-menu-item">
-						All coworkers
-					</div>
-
-					<div class="clearfix"></div>
-				</div>
-			</div>
-		</div>
-
+		<div th:replace="header :: header('coworkers')"></div>
 		<div class="clearfix"></div>
 
 		<div class="main-info-container container-fluid">
-			<!-- MAIN PAGE INFO CONTAINER -->
-
 
 			<div class="col-lg-12 col-md-12 col-sm-12 block-panel" id="coworkers-info">
 				<div class="block-panel-inner">
-					<div class="small-heading" style="margin-bottom: 15px;">Your coworkers</div>
+					<div class="small-heading" style="margin-bottom: 15px;" th:text="#{coworkers.title}">Your coworkers</div>
 
-					<div class="coworker-block row">
+					<div class="coworker-block row" th:each="coworker : ${coworkers}">
 						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/raven.png" class="profile-small-photo" />
+							<img src="./images/raven.png" class="profile-small-photo" />
 
 							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">Raven Darkholme</div>
-								<div class="profile-small-position">HR manager</div>
+								<div class="profile-small-fullname" th:text="${coworker.firstName + ' ' + coworker.lastName}"></div>
+								<div class="profile-small-position" th:text="${coworker.position}"></div>
 							</div>
 						</div>
 
 						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (035) 333-43-42</div>
+							<div class="coworker-heading" th:text="#{coworkers.phoneNumber}"></div>
+							<div class="coworker-value-small" th:text="${coworker.phoneNumber}?:#{coworkers.missing}"></div>
 						</div>
 
 						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">raven.darkholme@company.com</div>
+							<div class="coworker-heading" th:text="#{coworkers.email}"></div>
+							<div class="coworker-value" th:text="${coworker.email}"></div>
 						</div>
 
 						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">23 March 1983</div>
+							<div class="coworker-heading" th:text="#{coworkers.birthDate}"></div>
+							<div class="coworker-value" th:text="${coworker.birthDate}?:#{coworkers.missing}"></div>
 						</div>
 					</div>
 
-					<hr>
-
-					<div class="coworker-block row">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/kurt.png" class="profile-small-photo" />
-
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">Kurt Wagner</div>
-								<div class="profile-small-position">Head of Management</div>
-							</div>
-						</div>
-
-						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (067) 893-15-77</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">kurt.wagner@company.com</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">15 July 1990</div>
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="coworker-block row">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/erik.png" class="profile-small-photo" />
-
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">Erik Knuppel</div>
-								<div class="profile-small-position">Senior Product Manager</div>
-							</div>
-						</div>
-
-						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (090) 673-23-97</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">erik.knuppel@company.com</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">8 September 1979</div>
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="coworker-block row">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/sam.png" class="profile-small-photo" />
-
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">Samantha Phillips</div>
-								<div class="profile-small-position">Product Owner</div>
-							</div>
-						</div>
-
-						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (022) 678-35-00</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">samantha.phillips@company.com</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">21 November 1991</div>
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="coworker-block row">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/james.png" class="profile-small-photo" />
-
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">James Nuckolls</div>
-								<div class="profile-small-position">Lead Software Engineer</div>
-							</div>
-						</div>
-
-						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (036) 523-12-13</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">james.nuckolls@company.com</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">18 June 1985</div>
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="coworker-block row">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/victor.png" class="profile-small-photo" />
-
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">Victor Prokofiev</div>
-								<div class="profile-small-position">QA Engineer</div>
-							</div>
-						</div>
-
-						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (044) 523-88-12</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">victor.prokofiev@company.com</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">9 May 1983</div>
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="coworker-block row">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./img/alex.png" class="profile-small-photo" />
-
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname">Alex Trifan</div>
-								<div class="profile-small-position">UX, UI designer</div>
-							</div>
-						</div>
-
-						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
-							<div class="coworker-heading">Phone:</div>
-							<div class="coworker-value-small">+38 (099) 627-22-37</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Email:</div>
-							<div class="coworker-value">alex.trifan@company.com</div>
-						</div>
-
-						<div class="coworker-info col-lg-3 col-md-3 col-sm-3">
-							<div class="coworker-heading">Date of birth:</div>
-							<div class="coworker-value">12 October 1987</div>
-						</div>
-					</div>
+					<hr/>
 
 				</div>
 			</div>

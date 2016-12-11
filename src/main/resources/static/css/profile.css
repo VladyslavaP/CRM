@@ -162,3 +162,139 @@
 	text-decoration: none;
 	color: #333;
 }
+
+.input {
+    margin-top: 10px;
+    width: 100%;
+    height: 48px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    color: #333;
+    border: 0;
+    padding: 10px 8px;
+    font-size: 16px;
+    line-height: 24px;
+    border: 1px solid #ccc;
+    -webkit-transition: border .1s linear,box-shadow .1s linear;
+    -moz-transition: border .1s linear,box-shadow .1s linear;
+    -o-transition: border .1s linear,box-shadow .1s linear;
+    transition: border .1s linear,box-shadow .1s linear;
+}
+.input.input-small {
+    height: 25px;
+}
+
+.profile-userinfo-block[role="form"] {
+    display: none;
+    width: 320px;
+}
+
+.profile-userinfo-block[role="form"] input {
+    padding: 5px 8px;
+    height: 28px;
+    display: inline-block;
+}
+
+.profile-userinfo-block[role="form"] .profile-fullname #firstName,
+  .profile-userinfo-block[role="form"] .profile-fullname #lastName{
+    width: 49%;
+}
+
+.block-panel-inner {
+    position: relative;
+}
+.block-panel-inner > .edit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.block-panel-inner > .save-button {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.calendar-header {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.calendar-month-picker {
+    display: inline-block;
+}
+.month-arrow, .month-current {
+    display: inline-block;
+}
+.month-arrow {
+    height: 25px;
+}
+.month-arrow > img {
+    margin-bottom: 5px
+}
+.month-arrow:first-child {
+    margin-right: 10px;
+}
+.month-arrow:last-child {
+    margin-left: 10px;
+}
+.month-current {
+    font-size: 18px;
+    margin-top: 4px;
+}
+.calendar-add-event {
+    float:right;
+    margin-top: 10px;
+    color: #5dc369;
+    cursor: pointer;
+}
+.calendar-add-event > img {
+    margin-left: 10px;
+}
+.calendar > hr {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.week-day-cell {
+    width: 14.25%;
+    float: left;
+    text-align: center;
+    color: #333;
+    position: relative;
+}
+.week-day-cell.passed {
+    opacity: 0.5;
+}
+.bullets {
+    position: absolute;
+    width: 100%;
+}
+.green-bullet {
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+    background-image: url('/images/green-bullet.png');
+}
+.orange-bullet {
+    display: inline-block;
+    height: 6px;
+    width: 7px;
+    background-image: url('/images/orange-bullet.png');
+}
+.blue-bullet {
+    display: inline-block;
+    height: 6px;
+    width: 6px;
+    background-image: url('/images/blue-bullet.png');
+}
+.tooltipster {
+    cursor: pointer;
+}
+
+#profile-detailed-info input {
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding: 5px 8px;
+  height: 2em;
+}

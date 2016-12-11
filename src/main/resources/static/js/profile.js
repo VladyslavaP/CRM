@@ -3,40 +3,15 @@ var users = [];
 var reviews = [];
 
 $(document).ready(function() {
-	// Getting info about current user
-
-	/*requestManager.setServiceName('UserService');
-	requestManager.setEndpointName('getUserInfo.php');
-	requestManager.call(
-		function (response) { // SUCCESS
-
-			var userAccount = JSON.parse(response);
-			current_user = userAccount;
-
-			if (userAccount.photo.length > 1) {
-				$('.profile-user .profile-photo').attr('src', userAccount.photo);
-			}
-
-			$('.profile-user .profile-fullname').text(userAccount.full_name);
-			$('.profile-user .profile-position').text(userAccount.position);
-		},
-		function (response) { // FAIL
-			alert('Unable to get User data.');
-		}
-	);
-
-	var login_interval = setInterval(function() {
-		if (current_user) {
-			clearInterval(login_interval);
-			loadTeamInfo();
-		}
-	},100);*/
-
 	$('.tooltipster').tooltipster({
 		theme: 'tooltipster-shadow'
 	});
 
-	$('#user-profile .edit-button').click(function() {
+    $('.main-info-container').on('click', '.edit-button', function() {
+        $(this).siblings('.save-button').toggle();
+    })
+
+	$('#user-profile').on('click', '.edit-button', function() {
 		if ($('.profile-userinfo-block[role="form"]').css('display') == 'none') {
 			$('.profile-userinfo-block[role="info"]').hide();
 			$('.profile-userinfo-block[role="form"]').css('display','inline-block');
@@ -47,9 +22,54 @@ $(document).ready(function() {
 			$('.profile-userinfo-block[role="info"]').css('display','inline-block');
 		}
 	});
+
+	$('#profile-detailed-info').on('click', '.edit-button', function() {
+	    $('#profile-detailed-info div.medium-value.editable').toggle();
+	    $('#profile-detailed-info input.medium-value').toggle();
+	});
+
+	$('#profile-detailed-info').on('click', '.save-button', function() {
+	    var component = $(this).parents("#profile-detailed-info");
+        $.ajax({
+            url: '/updateDetails',
+            type: "POST",
+            contentType: "application/json",
+            beforeSend: setUpCsrf,
+            data: JSON.stringify({
+                phoneNumber: component.find("input[name='phoneNumber']").val(),
+                birthDate: component.find("input[name='birthDate']").val()
+            }),
+            success: function(data){
+                component.empty().append($(data).contents());
+            }
+        });
+    });
+
+    $('#user-profile').on('click', '.save-button', function() {
+	    var component = $(this).parents("#user-profile");
+        $.ajax({
+            url: '/updateName',
+            type: "POST",
+            contentType: "application/json",
+            beforeSend: setUpCsrf,
+            data: JSON.stringify({
+                firstName: component.find("input[name='firstName']").val(),
+                lastName: component.find("input[name='lastName']").val(),
+                position: component.find("input[name='position']").val()
+            }),
+            success: function(data){
+                component.empty().append($(data).contents());
+            }
+        });
+    });
 	
 });
 
+function setUpCsrf(xhr) {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    xhr.setRequestHeader(header, token);
+}
 
 
 function loadTeamInfo() {
