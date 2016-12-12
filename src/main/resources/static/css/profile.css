@@ -301,4 +301,9 @@
 
 #profile-detailed-info input.datepicker{
   margin-bottom: 0px;
+  font-size: 16px;
+}
+
+#profile-detailed-info .date{
+  margin-bottom: 16px;
 }
