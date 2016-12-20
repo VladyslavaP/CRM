@@ -52,6 +52,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return repository.findAll();
     }
 
+    @Override
+    public Optional<Employee> getEmployeeById(Long userId) {
+        return ofNullable(repository.findOne(userId));
+    }
+
+    @Override
+    public void updateEmployeePhoto(Long employeeId, String photoUrl) {
+        Employee employeeToUpdate = repository.findOne(employeeId);
+        employeeToUpdate.setPhotoUrl(photoUrl);
+        repository.save(employeeToUpdate);
+    }
+
     private String getRealStringValue(String value) {
         return hasText(value) ? value : null;
     }

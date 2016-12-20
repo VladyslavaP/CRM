@@ -1,6 +1,26 @@
-var current_user = null;
-var users = [];
-var reviews = [];
+var fullCalendarHelper = {
+    timeFormat: "h(:mm)t",
+    midnight: "0:00:00",
+    midnightFormat: "H:mm:ss",
+    styleDayElement:function(date, cell){
+       if (date.isBefore(moment())){
+           cell.addClass('disabled');
+       } else {
+           cell.css("cursor", "cell");
+       }
+    },
+    isMidnight:function(mom) {
+        return mom.format(this.midnightFormat) == this.midnight;
+    },
+    formatEventElementTitle:function(event) {
+        var prefix = this.isMidnight(event.start) ? "" : event.start.format(this.timeFormat) + " ";
+        return prefix + event.title;
+    },
+    styleEventElement: function(event, element) {
+       element.attr('title', fullCalendarHelper.formatEventElementTitle(event));
+       element.css("cursor", "pointer")
+    }
+}
 
 $(document).ready(function() {
 	$('.tooltipster').tooltipster({
@@ -35,13 +55,13 @@ $(document).ready(function() {
             url: '/updateDetails',
             type: "POST",
             contentType: "application/json",
-            beforeSend: setUpCsrf,
             data: JSON.stringify({
                 phoneNumber: component.find("input[name='phoneNumber']").val(),
                 birthDate: component.find("input[name='birthDate']").val()
             }),
             success: function(data){
                 component.empty().append($(data).contents());
+                setUpDatePicker();
             }
         });
     });
@@ -52,11 +72,11 @@ $(document).ready(function() {
             url: '/updateName',
             type: "POST",
             contentType: "application/json",
-            beforeSend: setUpCsrf,
             data: JSON.stringify({
                 firstName: component.find("input[name='firstName']").val(),
                 lastName: component.find("input[name='lastName']").val(),
-                position: component.find("input[name='position']").val()
+                position: component.find("input[name='position']").val(),
+                email: profileUser.email
             }),
             success: function(data){
                 component.empty().append($(data).contents());
@@ -64,127 +84,121 @@ $(document).ready(function() {
         });
     });
 
-    $('#profile-detailed-info .input-group.date').datepicker({
-        format: "yyyy-mm-dd"
+    function setUpDatePicker() {
+        $('#profile-detailed-info .input-group.date').datepicker({
+            format: "yyyy-mm-dd"
+        });
+    };
+    setUpDatePicker();
+
+    $("#calendar").fullCalendar({
+        selectable: false,
+        editable: false,
+        eventLimit: true,
+        timeFormat: fullCalendarHelper.timeFormat,
+        dayRender: fullCalendarHelper.styleDayElement,
+        eventRender: fullCalendarHelper.styleEventElement,
+        dayClick: function(date) {
+            if(!this.hasClass('fc-past')) {
+                $("#createEventForm input[name='date']").val(date.format("YYYY-MM-DD"));
+                $("#createEventForm").show();
+                $("#updateEventForm").hide();
+            }
+        },
+        eventClick: function(event) {
+            if(event.start.isSameOrAfter(moment())) {
+                $("#updateEventForm input[name='title']").val(event.title);
+                $("#updateEventForm input[name='id']").val(event.id);
+                $("#updateEventForm").show();
+                $("#createEventForm").hide();
+            }
+        },
+        events: profileUser.events.map(function(event) {
+            return {id: event.id, title: event.title, start: getEventDateTime(event)}
+        }),
+        eventColor: "#5BC0DE"
     });
+
+    $("#createEventForm").submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            url: '/users/' + profileUser.id + "/events/",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                title: form.find("input[name='title']").val(),
+                date: form.find("input[name='date']").val(),
+                time: form.find("input[name='time']").val()
+            }),
+            success: function(data){
+                cleanUpForm($(form));
+                $('#calendar').fullCalendar('unselect');
+                $('#calendar').fullCalendar('renderEvent', createCalendarEventData(data), true);
+            }
+        });
+    });
+
+    $("#updateEventForm #deleteEvent").click(function(e) {
+        e.preventDefault();
+        var form = $(this).parent();
+        var eventId = form.find("input[name='id']").val();
+        $.ajax({
+            url: '/users/' + profileUser.id + "/events/" + eventId,
+            type: "DELETE",
+            success: function(){
+                cleanUpForm($(form));
+                $('#calendar').fullCalendar('removeEvents', eventId);
+            }
+        });
+    });
+
+    $("#updateEventForm #updateEvent").click(function(e) {
+        e.preventDefault();
+        var form = $(this).parent();
+        var eventId = form.find("input[name='id']").val();
+        $.ajax({
+            url: '/users/' + profileUser.id + "/events/" + eventId,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                title: form.find("input[name='title']").val()
+            }),
+            success: function(data){
+                cleanUpForm($(form));
+                var calendarEvent = $('#calendar').fullCalendar('clientEvents', eventId)[0];
+                calendarEvent.title = data.title;
+                $('#calendar').fullCalendar('updateEvent', calendarEvent);
+            }
+        });
+    });
+
+    $(document).mouseup(function (e) {
+        var calendar = $("#profile-calendar")
+        if (!calendar.is(e.target) && calendar.has(e.target).length === 0) {
+            $("#createEventForm").hide();
+            $("#updateEventForm").hide();
+        }
+    });
+
+    function cleanUpForm(form) {
+        form.find("input:text").val("");
+        form.hide();
+    }
+
+    function createCalendarEventData(data) {
+        return {
+            id: data.id,
+            title: data.title,
+            start: getEventDateTime(data)
+        };
+    }
+
+    function getEventDateTime(data) {
+        var result = data.date;
+        if(data.time)
+            result += "T" + data.time;
+        return result;
+    }
 	
 });
-
-function setUpCsrf(xhr) {
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    xhr.setRequestHeader(header, token);
-}
-
-
-function loadTeamInfo() {
-	// Getting all users info
-
-	requestManager.setServiceName('UserService');
-	requestManager.setEndpointName('getAllUsersInfo.php');
-	requestManager.call(
-		function (response) { // SUCCESS
-
-			var userAccounts = JSON.parse(response);
-
-			if (!userAccounts || userAccounts.length < 1) {
-				return;
-			}
-
-			users = userAccounts;
-
-			var $emptyTeamMemberBlock = $('#profile-team-info .profile-team-member');
-
-			for (var i = 0; i < userAccounts.length; i++) {
-
-				if (current_user.login == userAccounts[i].login) {
-					continue;
-				}
-
-				var $clone = $emptyTeamMemberBlock.clone();
-				if (userAccounts[i].photo.length > 1) {
-					$emptyTeamMemberBlock.find('.profile-small-photo').attr('src', userAccounts[i].photo);
-				}
-				$emptyTeamMemberBlock.find('.profile-small-fullname').text(userAccounts[i].full_name);
-				$emptyTeamMemberBlock.find('.profile-small-position').text(userAccounts[i].position);
-
-				if (i < userAccounts.length - 1) {
-					$emptyTeamMemberBlock.after($clone);
-					$emptyTeamMemberBlock = $clone;
-				}
-			}
-		},
-		function (response) { // FAIL
-			alert('Unable to get User data.');
-		}
-	);
-
-	var all_users_interval = setInterval(function() {
-		if (current_user) {
-			clearInterval(all_users_interval);
-			loadReviewsInfo();
-		}
-	},100);
-}
-
-
-function loadReviewsInfo() {
-	// Getting reviews info
-
-	requestManager.setServiceName('ReviewService');
-	requestManager.setEndpointName('getAssignedReviews.php');
-	requestManager.call(
-		function (response) { // SUCCESS
-
-			var assignedReviews = JSON.parse(response);
-
-			if (!assignedReviews || assignedReviews.length < 1) {
-				return;
-			}
-
-			reviews = assignedReviews;
-			$('#reviews-in-progress').text(assignedReviews.length);
-
-			var $emptyReviewBlock = $('#profile-reviews-info .review-block');
-
-			for (var i = 0; i < assignedReviews.length; i++) {
-				var $clone = $emptyReviewBlock.clone();
-
-				var userAccount = getUserByLogin(assignedReviews[i].review_for);
-
-				if (userAccount.photo.length > 1) {
-					$emptyReviewBlock.find('.profile-small-photo').attr('src', userAccount.photo);
-				}
-				$emptyReviewBlock.find('.profile-small-fullname').text(userAccount.full_name);
-				$emptyReviewBlock.find('.profile-small-position').text(userAccount.position);
-
-				$emptyReviewBlock.find('.review-info').text(assignedReviews[i].description);
-
-				if (i < assignedReviews.length - 1) {
-					$emptyReviewBlock.after($clone);
-					$emptyReviewBlock.after('<hr>');
-					$emptyReviewBlock = $clone;
-				}
-			}
-
-		},
-		function (response) { // FAIL
-			alert('Unable to get User data.');
-		}
-	);
-}
-
-
-function getUserByLogin(login) {
-	if(!users) {
-		return false;
-	}
-
-	for (var i = 0; i < users.length; i++) {
-		if (users[i].login == login) {
-			return users[i];
-		}
-	}
-
-	return false;
-}

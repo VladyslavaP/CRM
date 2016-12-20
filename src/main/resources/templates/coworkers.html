@@ -26,14 +26,16 @@
 					<div class="small-heading" style="margin-bottom: 15px;" th:text="#{coworkers.title}">Your coworkers</div>
 
 					<div class="coworker-block row" th:each="coworker : ${coworkers}">
-						<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
-							<img src="./images/raven.png" class="profile-small-photo" />
+						<a th:href="@{/(email=${coworker.email})}" th:remove="${currentUser.role.name() != 'MANAGER'}? tag">
+							<div class="profile-small-user col-lg-4 col-md-4 col-sm-4">
+								<img th:src="@{${coworker.photoUrl}?: ${noPhotoUrl}}" class="profile-small-photo" />
 
-							<div class="profile-userinfo-block">
-								<div class="profile-small-fullname" th:text="${coworker.firstName + ' ' + coworker.lastName}"></div>
-								<div class="profile-small-position" th:text="${coworker.position}"></div>
+								<div class="profile-userinfo-block">
+									<div class="profile-small-fullname" th:text="${coworker.firstName + ' ' + coworker.lastName}"></div>
+									<div class="profile-small-position" th:text="${coworker.position}"></div>
+								</div>
 							</div>
-						</div>
+						</a>
 
 						<div class="coworker-info col-lg-2 col-md-2 col-sm-2">
 							<div class="coworker-heading" th:text="#{coworkers.phoneNumber}"></div>

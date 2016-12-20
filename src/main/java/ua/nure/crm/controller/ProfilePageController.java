@@ -13,6 +13,7 @@ import ua.nure.crm.controller.util.RoutingConstants;
 import ua.nure.crm.controller.util.ModelViewConstants;
 import ua.nure.crm.entity.Employee;
 import ua.nure.crm.service.EmployeeService;
+import ua.nure.crm.service.PhotoService;
 
 import java.util.Optional;
 
@@ -25,9 +26,16 @@ public class ProfilePageController extends BasePageController {
 
     private EmployeeService employeeService;
 
+    private PhotoService photoService;
+
     @Autowired
     public void setEmployeeService(EmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    @Autowired
+    public void setPhotoService(PhotoService photoService) {
+        this.photoService = photoService;
     }
 
     @InitBinder
@@ -35,33 +43,38 @@ public class ProfilePageController extends BasePageController {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = "!" + EMAIL_PARAMETER)
+    @GetMapping(params = "!" + EMAIL_PARAMETER)
     public String getCurrentEmployeeProfilePage(Model model) {
         Employee currentEmployee = getCurrentEmployee(model);
         return getPageWithPopulatedData(model, currentEmployee);
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = EMAIL_PARAMETER)
+    @GetMapping(params = EMAIL_PARAMETER)
     public String getAnotherEmployeeProfilePage(@RequestParam(required = true) String email, Model model) {
+        return getPageWithPopulatedData(model, getEmployeeByEmail(email));
+    }
+
+    private Employee getEmployeeByEmail(String email) {
         Optional<Employee> employee = employeeService.getEmployeeByEmail(email);
         checkIfExists(employee);
-        return getPageWithPopulatedData(model, employee.get());
+        return employee.get();
     }
 
     @UpdateCurrentUser
-    @RequestMapping(value= RoutingConstants.UPDATE_DETAILS, method = RequestMethod.POST)
+    @PostMapping(value= RoutingConstants.UPDATE_DETAILS)
     public String updateDetails(@RequestBody UpdateDetailsForm form, Model model) {
         Employee updatedEmployee = employeeService
                 .updateEmployeeDetails(getCurrentEmployee(model).getId(), form);
         model.addAttribute(CURRENT_USER_PARAMETER, updatedEmployee);
+        populateModelWithEmployeeData(updatedEmployee, model);
         return ModelViewConstants.DETAILS_FRAGMENT;
     }
 
-    @UpdateCurrentUser
-    @RequestMapping(value= RoutingConstants.UPDATE_NAME, method = RequestMethod.POST)
+    @PostMapping(value= RoutingConstants.UPDATE_NAME)
     public String updateNAme(@RequestBody UpdateNameForm form, Model model) {
         Employee updatedEmployee = employeeService
-                .updateEmployeeNameAndPosition(getCurrentEmployee(model).getId(), form);
+                .updateEmployeeNameAndPosition(getEmployeeByEmail(form.getEmail()).getId(), form);
+        populateModelWithEmployeeData(updatedEmployee, model);
         model.addAttribute(CURRENT_USER_PARAMETER, updatedEmployee);
         return ModelViewConstants.NAME_FRAGMENT;
     }
@@ -72,11 +85,11 @@ public class ProfilePageController extends BasePageController {
     }
 
     private void populateModelWithEmployeeData(Employee employee, Model model) {
-
+        model.addAttribute(ModelViewConstants.PROFILE_USER_PARAMETER, employee);
     }
 
-    private String getPageWithPopulatedData(Model model, Employee currentEmployee) {
-        populateModelWithEmployeeData(currentEmployee, model);
+    private String getPageWithPopulatedData(Model model, Employee employee) {
+        populateModelWithEmployeeData(employee, model);
         return ModelViewConstants.PROFILE_PAGE;
     }
 

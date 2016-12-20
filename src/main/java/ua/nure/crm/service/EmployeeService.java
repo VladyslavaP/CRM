@@ -16,4 +16,8 @@ public interface EmployeeService{
     Employee updateEmployeeNameAndPosition(Long employeeId, UpdateNameForm form);
 
     List<Employee> getAllEmployees();
+
+    Optional<Employee> getEmployeeById(Long employeeId);
+
+    void updateEmployeePhoto(Long employeeId, String photoUrl);
 }

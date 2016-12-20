@@ -1,9 +1,8 @@
 package ua.nure.crm.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Employee extends User{
@@ -22,6 +21,12 @@ public class Employee extends User{
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "photo_url")
+    private String photoUrl;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Event> events;
 
     public String getPosition() {
         return position;
@@ -61,5 +66,21 @@ public class Employee extends User{
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

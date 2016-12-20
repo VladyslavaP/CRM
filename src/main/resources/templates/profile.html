@@ -5,6 +5,7 @@
 
 	<title>Your profile | CRM system</title>
 	<script type="text/javascript" src="./js/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="./js/moment.js"></script>
 	<script type="text/javascript" src="./js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="./css/bootstrap.min.css"/>
 
@@ -14,10 +15,21 @@
 	<script type="text/javascript" src="./js/main.js"></script>
 	<script type="text/javascript" src="./js/profile.js"></script>
 	<script type="text/javascript" src="./js/bootstrap-datepicker.min.js"></script>
+	<script type="text/javascript" src="./js/fullcalendar.js"></script>
+	<script type="text/javascript" src="./js/avatar.js"></script>
 
 	<link rel="stylesheet" href="./css/main.css"/>
 	<link rel="stylesheet" href="./css/profile.css"/>
 	<link rel="stylesheet" href="./css/bootstrap-datepicker3.min.css"/>
+	<link rel='stylesheet' href='./css/fullcalendar.css' />
+	<link rel='stylesheet' href='./css/avatar.css' />
+	<script th:inline="javascript">
+		var profileUser = {
+			id: [[${profileUser.id}]],
+			email: [[${profileUser.email}]],
+			events: /*[[${profileUser.events}]]*/ []
+		};
+	</script>
 </head>
 
 <body>

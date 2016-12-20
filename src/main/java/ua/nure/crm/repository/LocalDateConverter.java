@@ -15,10 +15,6 @@ public class LocalDateConverter implements AttributeConverter<LocalDate, Date> {
         return ofNullable(date).map(Date::valueOf).orElse(null);
     }
 
-    private ZonedDateTime atStartOfDayInDefaultZone(LocalDate date) {
-        return date.atStartOfDay().atZone(ZoneId.systemDefault());
-    }
-
     @Override
     public LocalDate convertToEntityAttribute(Date value) {
         return ofNullable(value).map(Date::toLocalDate)

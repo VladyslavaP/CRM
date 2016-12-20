@@ -1,24 +1,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<div class="row block-panel" id="user-profile" th:fragment="name">
+<div class="row block-panel" id="user-profile" th:fragment="name"
+     th:with="isProfileUser=${currentUser.id == profileUser.id}">
     <div class="block-panel-inner" >
         <div class="col-lg-6 col-md-6 col-sm-6" id="profile-main-info">
             <div class="block-panel-inner">
 
                 <div class="profile-user">
-                    <img src="./images/oleksiy.png" class="profile-photo" />
+
+                    <div class="avatar" th:classappend="${isProfileUser} ? 'editable' : ''">
+                        <img th:src="@{${profileUser.photoUrl}?: ${noPhotoUrl}}" class="profile-photo" />
+                    </div>
+                    <script th:inline="javascript" th:if="${isProfileUser}">
+                        new AvatarUpload({
+                            el: document.querySelector('.avatar'),
+                            uploadUrl: '/photos',
+                            uploadData : {userId: profileUser.id}
+                        });
+                    </script>
 
                     <div class="profile-userinfo-block" role="info">
-                        <div class="profile-fullname" id="fullname-display" th:text="${currentUser.firstName + ' ' + currentUser.lastName}"></div>
-                        <div class="profile-position" id="fullname-position" th:text="${currentUser.position}"></div>
+                        <div class="profile-fullname" id="fullname-display" th:text="${profileUser.firstName + ' ' + profileUser.lastName}"></div>
+                        <div class="profile-position" id="fullname-position" th:text="${profileUser.position}"></div>
                     </div>
 
                     <div class="profile-userinfo-block" role="form">
                         <div class="profile-fullname">
-                            <input type="text" id="firstName" name="firstName" class="input input-small" th:value="${currentUser.firstName}"/>
-                            <input type="text" id="lastName" name="lastName" class="input input-small" th:value="${currentUser.lastName}"/>
+                            <input type="text" id="firstName" name="firstName" class="input input-small" th:value="${profileUser.firstName}"/>
+                            <input type="text" id="lastName" name="lastName" class="input input-small" th:value="${profileUser.lastName}"/>
                         </div>
                         <div class="profile-position">
-                            <input type="text" id="position" name="position" class="input input-small" th:value="${currentUser.position}"/>
+                            <input type="text" id="position" name="position" class="input input-small" th:value="${profileUser.position}"/>
                         </div>
                     </div>
                 </div>
@@ -29,7 +40,7 @@
         <div class="save-button" style="display:none">
             <img src="./images/save.png"/>
         </div>
-        <div class="edit-button" th:if="${currentUser.role.name() == 'MANAGER'}">
+        <div class="edit-button" th:if="${currentUser.role.name() == 'MANAGER' and !isProfileUser}">
             <img src="./images/pencil.png" />
         </div>
         <div class="clearfix"></div>

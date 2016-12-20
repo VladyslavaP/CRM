@@ -4,23 +4,23 @@
         <div class="small-heading" style="margin-bottom:25px;" th:text="#{profile.personalData.yourInformation}"></div>
 
         <div class="medium-heading" th:text="#{profile.personalData.email}"></div>
-        <div class="medium-value" th:text="${currentUser.email}"></div>
+        <div class="medium-value" id="email" th:text="${profileUser.email}"></div>
 
 
         <div class="medium-heading" th:text="#{profile.personalData.phoneNumber}"></div>
-        <div class="medium-value editable" th:text="${currentUser.phoneNumber}?:#{profile.personalData.missing}"></div>
-        <input style="display:none" class="medium-value input" name="phoneNumber" th:value="${currentUser.phoneNumber}?:''"/>
+        <div class="medium-value editable" th:text="${profileUser.phoneNumber}?:#{profile.personalData.missing}"></div>
+        <input style="display:none" class="medium-value input" name="phoneNumber" th:value="${profileUser.phoneNumber}?:''"/>
 
         <div class="medium-heading" th:text="#{profile.personalData.birthDate}"></div>
-        <div class="medium-value editable" th:text="${currentUser.birthDate}?:#{profile.personalData.missing}"></div>
+        <div class="medium-value editable" th:text="${profileUser.birthDate}?:#{profile.personalData.missing}"></div>
         <div style="display:none" class="input-group date">
-            <input type="text" class="form-control datepicker" name="birthDate" th:value="${currentUser.birthDate}?:''"/><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+            <input type="text" class="form-control datepicker" name="birthDate" th:value="${profileUser.birthDate}?:''"/><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
         </div>
 
         <div class="save-button" style="display:none">
             <img src="./images/save.png"/>
         </div>
-        <div class="edit-button">
+        <div class="edit-button" th:if="${currentUser.id == profileUser.id}">
             <img src="./images/pencil.png"/>
         </div>
 
