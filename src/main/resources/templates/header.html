@@ -4,7 +4,11 @@
     <h1 class="profile-sublogo">Profile</h1>
     <div id="main-menu">
         <div class="small-menu">
-            <div class="small-menu-item" th:classappend="${tab == 'profile'} ? 'active' : ''">
+            <div class="small-menu-item active" th:if="${tab == 'profile' and currentUser.id != profileUser.id}">
+                <span>Coworker profile</span>
+            </div>
+
+            <div class="small-menu-item" th:classappend="${tab == 'profile' and currentUser.id == profileUser.id} ? 'active' : ''">
                 <a href="/">Your profile</a>
             </div>
 

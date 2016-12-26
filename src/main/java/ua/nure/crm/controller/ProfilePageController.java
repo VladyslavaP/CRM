@@ -32,16 +32,9 @@ public class ProfilePageController extends BasePageController {
 
     private EmployeeService employeeService;
 
-    private PhotoService photoService;
-
     @Autowired
     public void setEmployeeService(EmployeeService employeeService) {
         this.employeeService = employeeService;
-    }
-
-    @Autowired
-    public void setPhotoService(PhotoService photoService) {
-        this.photoService = photoService;
     }
 
     @InitBinder
