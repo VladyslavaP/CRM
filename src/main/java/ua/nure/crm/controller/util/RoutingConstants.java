@@ -15,4 +15,6 @@ public final class RoutingConstants {
     public static final String PHOTOS = "/photos";
     public static final String PHOTO_ID = "/{photoId}";
     public static final String NO_PHOTO = "/noPhoto";
+    public static final String GOAL_ID = "/{goalId}";
+    public static final String PROGRESS = "/progress/{progress}";
 }

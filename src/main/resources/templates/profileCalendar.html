@@ -5,24 +5,27 @@
 
         <div id="calendar"></div>
 
-        <form id="createEventForm"
-              th:if="${currentUser.id == profileUser.id or currentUser.role.name() == 'MANAGER'}"
-              hidden="hidden">
-            <input name="title"/>
-            <input name="date" hidden="hidden"/>
-            <input name="time"/>
+        <hr/>
 
-            <input type="submit" value="Create"/>
+        <form id="createEventForm" class="form-inline"
+              th:if="${currentUser.id == profileUser.id or currentUser.role.name() == 'MANAGER'}">
+            <input name="title" class="form-control input-sm" placeholder="Title"/>
+            <input name="date" hidden="hidden"/>
+            <input name="time" class="time-input form-control input-sm" placeholder="Start Time"/>
+
+            <input type="submit" value="Create" id="createEvent" class="btn btn-default btn-sm disabled"/>
+
+            <span class="show-date"></span>
         </form>
 
-        <form id="updateEventForm"
+        <form id="updateEventForm" class="form-inline"
               th:if="${currentUser.id == profileUser.id or currentUser.role.name() == 'MANAGER'}"
               hidden="hidden">
-            <input name="title"/>
+            <input name="title" class="form-control input-sm" placeholder="Title"/>
             <input name="id" hidden="hidden"/>
 
-            <input type="submit" id="updateEvent" value="Update"/>
-            <input type="submit" id="deleteEvent" value="Delete"/>
+            <input type="submit" id="updateEvent" value="Update" class="btn btn-default btn-sm"/>
+            <input type="submit" id="deleteEvent" value="Delete" class="btn btn-default btn-sm"/>
         </form>
 
     </div>

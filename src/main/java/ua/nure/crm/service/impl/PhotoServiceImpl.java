@@ -17,8 +17,6 @@ import static java.lang.System.currentTimeMillis;
 @Service
 public class PhotoServiceImpl implements PhotoService, InitializingBean {
 
-    public static final String BEFORE_EXTENSION = "^(.+)(?=\\.)";
-
     @Value("${local.photo.directory}")
     private String photoDirectoryPath;
 
@@ -62,10 +60,6 @@ public class PhotoServiceImpl implements PhotoService, InitializingBean {
 
     private String generateId(MultipartFile file) {
         return  Long.toString(currentTimeMillis(), 32);
-    }
-
-    protected String getExtension(MultipartFile file) {
-        return file.getOriginalFilename().replaceAll(BEFORE_EXTENSION, "");
     }
 
     private Path findPhotoFile(String photoId) throws IOException {

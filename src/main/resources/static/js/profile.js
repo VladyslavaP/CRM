@@ -23,11 +23,7 @@ var fullCalendarHelper = {
 }
 
 $(document).ready(function() {
-	$('.tooltipster').tooltipster({
-		theme: 'tooltipster-shadow'
-	});
-
-    $('.main-info-container').on('click', '.edit-button', function() {
+	$('.main-info-container').on('click', '.edit-button', function() {
         $(this).siblings('.save-button').toggle();
     })
 
@@ -61,7 +57,7 @@ $(document).ready(function() {
             }),
             success: function(data){
                 component.empty().append($(data).contents());
-                setUpDatePicker();
+                setUpBirthDatePicker();
             }
         });
     });
@@ -84,12 +80,26 @@ $(document).ready(function() {
         });
     });
 
-    function setUpDatePicker() {
-        $('#profile-detailed-info .input-group.date').datepicker({
-            format: "yyyy-mm-dd"
+    function setUpDatePicker(element, startDate) {
+        element.datepicker({
+            startDate: startDate,
+            format: "yyyy-mm-dd",
+            weekStart: 1
         });
+    }
+    function setUpBirthDatePicker() {
+        setUpDatePicker($('#profile-detailed-info .input-group.date'));
+    }
+    function setUpGoalDueDatePicker() {
+        setUpDatePicker($("#profile-goals-info input[name='dueDate']"), '-0d');
+    }
+    setUpBirthDatePicker();
+    setUpGoalDueDatePicker();
+
+    function setUpTimePicker() {
+        $('input.time-input').mask("99:99");
     };
-    setUpDatePicker();
+    setUpTimePicker();
 
     $("#calendar").fullCalendar({
         selectable: false,
@@ -101,6 +111,8 @@ $(document).ready(function() {
         dayClick: function(date) {
             if(!this.hasClass('fc-past')) {
                 $("#createEventForm input[name='date']").val(date.format("YYYY-MM-DD"));
+                $("#createEventForm .show-date").html('for ' +  date.format("YYYY-MM-DD"));
+                $("#createEventForm #createEvent").removeClass('disabled');
                 $("#createEventForm").show();
                 $("#updateEventForm").hide();
             }
@@ -133,6 +145,8 @@ $(document).ready(function() {
             }),
             success: function(data){
                 cleanUpForm($(form));
+                $(form).find(".show-date").html("");
+                $(form).find("#createEvent").addClass('disabled');
                 $('#calendar').fullCalendar('unselect');
                 $('#calendar').fullCalendar('renderEvent', createCalendarEventData(data), true);
             }
@@ -173,17 +187,142 @@ $(document).ready(function() {
         });
     });
 
+    $("#profile-goals-info").on("submit", "#createGoalForm", function(e){
+        e.preventDefault();
+        var component = $(this).parents("#profile-goals-info");
+        var form = $(this);
+        $.ajax({
+            url: '/users/' + profileUser.id + "/goals/",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                title: form.find("input[name='title']").val(),
+                dueDate: form.find("input[name='dueDate']").val(),
+                parent: form.find("input[name='parent']").val()
+            }),
+            success: function(data){
+                renderGoalsComponent(component, data);
+            }
+        });
+    });
+
+    function renderGoalsComponent(component, data) {
+        component.empty().append($(data).contents());
+        setTimeLeft();
+        setUpTimePicker();
+        setUpGoalDueDatePicker();
+    }
+
+    $("#profile-goals-info").on("click", "#updateGoalForm #deleteGoal", function(e) {
+        e.preventDefault();
+        var component = $(this).parents("#profile-goals-info");
+        var form = $(this).parent();
+        $.ajax({
+            url: '/users/' + profileUser.id + "/goals/" + form.find("input[name='id']").val(),
+            type: "DELETE",
+            success: function(data){
+                renderGoalsComponent(component, data);
+            }
+        });
+    });
+
+    $("#profile-goals-info").on("click", "#updateGoalForm #updateGoal", function(e) {
+        e.preventDefault();
+        var component = $(this).parents("#profile-goals-info");
+        var form = $(this).parent();
+        $.ajax({
+            url: '/users/' + profileUser.id + "/goals/" + form.find("input[name='id']").val(),
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                title: form.find("input[name='title']").val(),
+                dueDate: form.find("input[name='dueDate']").val(),
+            }),
+            success: function(data){
+                renderGoalsComponent(component, data);
+            }
+        });
+    });
+
+    $("#profile-goals-info").on("click", "#updateGoalForm #createSubGoal", function(e) {
+        e.preventDefault();
+        $(this).parent().hide();
+        $("#createGoalForm").show()
+            .find("input[name='parent']").val($(this).siblings("input[name='id']").val());
+    });
+
+   $("#profile-goals-info").on("click", "#in-progress-goals .progress.editable", function(e){
+        var goalId = $(this).closest(".goal-block").data("id");
+        var posX = $(this).offset().left;
+        var progress = Math.round((e.pageX - posX) / $(this).width() * 100);
+        if(progress != 100 || confirm("Are you sure, that this goal is completed?"))
+            updateGoalProgress(goalId, progress);
+    });
+
+
+    function updateGoalProgress(goalId, progress) {
+        var component = $("#profile-goals-info");
+        $.ajax({
+            url: '/users/' + profileUser.id + "/goals/" + goalId + "/progress/" + progress,
+            type: "POST",
+            success: function(data){
+                renderGoalsComponent(component, data);
+            }
+        });
+    }
+
+    $("#profile-goals-info").on("click", "#in-progress-goals .goal-block .goal-title", function(e) {
+        $("#createGoalForm").hide();
+        $("#updateGoalForm").show();
+        var goalRow = $(this).closest(".goal-block");
+        $("#updateGoalForm input[name='id']").val(goalRow.data("id"));
+        $("#updateGoalForm input[name='title']").val(goalRow.find(".goal-title").html());
+        $("#updateGoalForm input[name='dueDate']").val(goalRow.find(".goal-due-date").data('due-date'));
+
+        if(goalRow.is(".child"))
+            $("#updateGoalForm #createSubGoal").hide();
+        else
+            $("#updateGoalForm #createSubGoal").show();
+    });
+
+    $("#profile-goals-info").on("click", "#in-progress-goals .expand-icon", function(e){
+        var childGoals = $(this).closest(".goal-block").next(".child-goals");
+        if(childGoals.is(':visible'))
+            childGoals.fadeOut();
+        else
+            childGoals.fadeIn();
+    });
+
+    function setTimeLeft() {
+        var now = moment().today;
+        $("#in-progress-goals .goal-due-date").each(function() {
+            var originalValue = $(this).html();
+            var dueDate = moment(originalValue);
+            $(this).html(dueDate.diff(now, 'days') + ' days left').data('due-date', originalValue);
+        });
+    }
+    setTimeLeft();
+
     $(document).mouseup(function (e) {
-        var calendar = $("#profile-calendar")
+        var calendar = $("#profile-calendar");
+        var goals = $("#profile-goals-info");
+        var datepicker = $(".datepicker");
         if (!calendar.is(e.target) && calendar.has(e.target).length === 0) {
-            $("#createEventForm").hide();
             $("#updateEventForm").hide();
+            $("#createEventForm").show();
         }
+        if (!goals.is(e.target) && goals.has(e.target).length === 0
+                && !datepicker.is(e.target) && datepicker.has(e.target).length === 0) {
+            $("#updateGoalForm").hide();
+            $("#createGoalForm").show();
+        }
+
     });
 
     function cleanUpForm(form) {
         form.find("input:text").val("");
-        form.hide();
+        $("#createEventForm").show();
+        $("#updateEventForm").hide();
     }
 
     function createCalendarEventData(data) {

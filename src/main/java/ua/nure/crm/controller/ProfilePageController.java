@@ -12,11 +12,17 @@ import ua.nure.crm.controller.util.ResourceNotFoundException;
 import ua.nure.crm.controller.util.RoutingConstants;
 import ua.nure.crm.controller.util.ModelViewConstants;
 import ua.nure.crm.entity.Employee;
+import ua.nure.crm.entity.Goal;
 import ua.nure.crm.service.EmployeeService;
 import ua.nure.crm.service.PhotoService;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static ua.nure.crm.controller.util.ModelViewConstants.CURRENT_USER_PARAMETER;
 import static ua.nure.crm.controller.util.ModelViewConstants.EMAIL_PARAMETER;
 
@@ -84,14 +90,9 @@ public class ProfilePageController extends BasePageController {
             throw new ResourceNotFoundException();
     }
 
-    private void populateModelWithEmployeeData(Employee employee, Model model) {
-        model.addAttribute(ModelViewConstants.PROFILE_USER_PARAMETER, employee);
-    }
-
     private String getPageWithPopulatedData(Model model, Employee employee) {
         populateModelWithEmployeeData(employee, model);
         return ModelViewConstants.PROFILE_PAGE;
     }
-
 
 }

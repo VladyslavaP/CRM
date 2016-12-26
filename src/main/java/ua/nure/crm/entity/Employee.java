@@ -1,5 +1,8 @@
 package ua.nure.crm.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +28,14 @@ public class Employee extends User{
     @Column(name = "photo_url")
     private String photoUrl;
 
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Event> events;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OrderBy("id ASC")
+    private List<Goal> goals;
 
     public String getPosition() {
         return position;
@@ -82,5 +91,13 @@ public class Employee extends User{
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public List<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
     }
 }
